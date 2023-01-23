@@ -50,4 +50,50 @@ create or replace TABLE D_BHATBHATENI_STORE_T (
 );
 """)
 
+# Queries for Target Table
+cs.execute("USE SCHEMA DW_TGT")
+cs.execute("""
+            CREATE OR REPLACE TABLE D_BHATBHATENI_CNTRY_T
+            (
+            CNTRY_ID NUMBER,
+            CNTRY_KY NUMBER NOT NULL,
+            CNTRY_DESC VARCHAR(50),
+            OPEN_CLOSE_CD VARCHAR(1), 
+            ROW_INSRT_TMS TIMESTAMP_NTZ,
+            ROW_UPDT_TMS TIMESTAMP_NTZ,
+            CONSTRAINT CNTRY_PK PRIMARY key (CNTRY_KY)
+            );
+            """)
+
+cs.execute("""
+            CREATE OR REPLACE TABLE D_BHATBHATENI_RGN_T
+            (
+            RGN_ID NUMBER,
+            RGN_KY NUMBER NOT NULL,
+            CNTRY_KY NUMBER,
+            RGN_DESC VARCHAR(50),
+            OPEN_CLOSE_CD VARCHAR(1),  
+            ROW_INSRT_TMS TIMESTAMP_NTZ,
+            ROW_UPDT_TMS TIMESTAMP_NTZ,
+            CONSTRAINT RGN_PK PRIMARY key (RGN_KY),
+            CONSTRAINT CNTRY_FK FOREIGN key (CNTRY_KY) REFERENCES D_BHATBHATENI_CNTRY_T(CNTRY_KY) 
+            );
+            """)
+cs.execute("""
+            CREATE OR REPLACE TABLE D_BHATBHATENI_STORE_T
+            (
+            STORE_ID NUMBER,
+            STORE_KY NUMBER NOT NULL,
+            RGN_KY NUMBER,
+            STORE_DESC VARCHAR(50),
+            LAST_OPEN_TMS TIMESTAMP_NTZ,
+            LAST_CLOSED_TMS TIMESTAMP_NTZ,
+            ACTV_FLG VARCHAR(1),
+            OPEN_CLOSE_CD VARCHAR(1), 
+            ROW_INSRT_TMS TIMESTAMP_NTZ,
+            ROW_UPDT_TMS TIMESTAMP_NTZ,
+            CONSTRAINT STORE_PK PRIMARY KEY (STORE_KY),
+            CONSTRAINT RGN_FK FOREIGN KEY (RGN_KY) REFERENCES D_BHATBHATENI_RGN_T(RGN_KY)
+            );
+            """)
 cs.close()

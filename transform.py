@@ -58,7 +58,6 @@ def insertToTemp(tableNames):
                 sublist for sublist in tmpTableWithColumns if sublist[0] == table]
             stg = [
                 sublist for sublist in stgTableWithColumns if sublist[0] == table]
-            print(temp)
             query = """INSERT INTO DW_TMP.{}({},{}) SELECT DW_STG.{}.{}, DW_STG.{}.{} FROM DW_STG.{}""".format(
                 table, temp[0][2], temp[0][3], table, stg[0][1], table, stg[0][2], table)
             cs.execute(query)
